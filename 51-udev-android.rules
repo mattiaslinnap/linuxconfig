@@ -1,0 +1,3 @@
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0bb4", ATTRS{idProduct}=="0c01", GROUP="plugdev", MODE="0666", SYMLINK+="android%n"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0bb4", ATTRS{idProduct}=="0c02", GROUP="plugdev", MODE="0666", SYMLINK+="android%n"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0bb4", ATTRS{idProduct}=="0fff", GROUP="plugdev", MODE="0666", SYMLINK+="android-fastboot%n"
