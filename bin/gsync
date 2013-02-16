@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+from __future__ import absolute_import, division, print_function, unicode_literals
+from future_builtins import *  # ascii, filter, hex, map, oct, zip
+
+import os
+import sys
+import subprocess
+
+from pyshort.strings import printf
+
+def visit_dirs(dirs, func):
+    for dir in dirs:
+        owd = os.getcwd()
+        os.chdir(dir)
+        func(dir)
+        os.chdir(owd)
+
+    
+def check_git_exists(dir):
+    try:
+        assert os.path.exists('.git')
+        assert os.path.isdir('.git')   
+    except AssertionError:
+        printf('{} is not a git repository.', dir)
+        sys.exit(-1)
+
+
+def git_remotes():
+    out = subprocess.check_output(['git', 'remote'])
+    return list(map(unicode.strip, out.strip().split('\n')))
+
+
+def git_pull(dir, remote):
+    printf('{}: git pull {} master', dir, remote)
+    out = subprocess.check_output(['git', 'pull', remote, 'master'], stderr=subprocess.STDOUT)
+    if 'Already up-to-date.' not in out:
+        print(out.strip())
+
+
+def git_push(dir, remote):
+    printf('{}: git push {} master', dir, remote)
+    out = subprocess.check_output(['git', 'push', remote, 'master'], stderr=subprocess.STDOUT)
+    if 'Everything up-to-date' not in out:
+        print(out.strip())
+    
+
+def sync(dir):
+    try:
+        remotes = git_remotes()
+        for remote in remotes:
+            git_pull(dir, remote)
+        for remote in remotes:
+            git_push(dir, remote)
+    except subprocess.CalledProcessError, e:
+        print(e.output.strip(), file=sys.stderr)
+        sys.exit(-2)
+        
+
+def main(dirs):
+    visit_dirs(dirs, check_git_exists)
+    visit_dirs(dirs, sync)
+		
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        main(sys.argv[1:])
+    else:
+        main(['.'])
