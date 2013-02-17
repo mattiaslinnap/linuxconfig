@@ -1,4 +1,15 @@
 #!/usr/bin/env python
+"""
+Synchronises all remotes in git.
+
+for all repos on the command line:
+    for all remotes:
+        git pull
+    for all remotes:
+        git push
+
+If no directories are given as arguments, synchronises the current directory.
+"""
 from __future__ import absolute_import, division, print_function, unicode_literals
 from future_builtins import *  # ascii, filter, hex, map, oct, zip
 
@@ -6,7 +17,13 @@ import os
 import sys
 import subprocess
 
-from pyshort.strings import printf
+
+def printf(fmt=None, *args, **kwargs):
+    if fmt:
+        print(fmt.format(*args, **kwargs))
+    else:
+        print()
+
 
 def visit_dirs(dirs, func):
     for dir in dirs:
