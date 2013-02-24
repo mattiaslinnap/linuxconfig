@@ -33,10 +33,14 @@ def visit_dirs(dirs, func):
         os.chdir(owd)
 
     
-def check_git_exists(dir):
+def check_git_clean(dir):
     try:
         assert os.path.exists('.git')
-        assert os.path.isdir('.git')   
+        assert os.path.isdir('.git')
+        out = subprocess.check_output(['git', 'status'], stderr=subprocess.STDOUT)
+        if 'nothing to commit (working directory clean)' not in out:
+            printf('{} has uncommited work. Commit or remove it before sync.', dir)
+            sys.exit(-3)
     except AssertionError:
         printf('{} is not a git repository.', dir)
         sys.exit(-1)
@@ -74,7 +78,7 @@ def sync(dir):
         
 
 def main(dirs):
-    visit_dirs(dirs, check_git_exists)
+    visit_dirs(dirs, check_git_clean)
     visit_dirs(dirs, sync)
 		
 
