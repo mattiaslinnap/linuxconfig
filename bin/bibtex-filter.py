@@ -56,6 +56,15 @@ def delete_notes(bibs):
             del entry.fields['annote']
 
 
+def make_online(bibs):
+     """Mendeley does not support @online entries but biblatex does
+        So if an entry is @misc and has a url then make it @online
+     """
+     for entry in bibs.entries.itervalues():
+         if (entry.type == u'misc' and entry.fields.has_key(u'url')):
+             entry.type = u'online'
+
+
 def write_output(args, bibs):
     writer = bibtex_output.Writer()
     writer.write_file(bibs, args.output_bibtex)
@@ -70,6 +79,7 @@ def main(args):
         print('Keeping all citations as --input-aux not specified', file=sys.stderr)
     bibs = parse_bibtex(args, wanted)
     delete_notes(bibs)
+    make_online(bibs)
     write_output(args, bibs)
 
 
