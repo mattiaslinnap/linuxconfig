@@ -11,6 +11,7 @@ import os
 from pybtex.database import BibliographyData
 from pybtex.database.input import bibtex as bibtex_input
 from pybtex.database.output import bibtex as bibtex_output
+from time import strptime
 import re
 import sys
 
@@ -64,6 +65,18 @@ def make_online(bibs):
          if (entry.type == u'misc' and entry.fields.has_key(u'url')):
              entry.type = u'online'
 
+def fix_months(bibs):
+    """The 'month' field must be specified as a numeric value not as say 'May'
+    """
+    for entry in bibs.entries.itervalues():
+        if (entry.fields.has_key(u'month')):
+            month = entry.fields[u'month']
+            if (not month.isdigit()):
+                try:# Try month full name and then abbreviation
+                    month = str(strptime(month,'%B').tm_mon)
+                except ValueError:
+                    month = str(strptime(month,'%b').tm_mon)
+                entry.fields[u'month'] = month
 
 def write_output(args, bibs):
     writer = bibtex_output.Writer()
@@ -80,6 +93,7 @@ def main(args):
     bibs = parse_bibtex(args, wanted)
     delete_notes(bibs)
     make_online(bibs)
+    fix_months(bibs)
     write_output(args, bibs)
 
 
