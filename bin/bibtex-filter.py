@@ -70,26 +70,23 @@ def fix_months(bibs):
     """The 'month' field must be specified as a numeric value not as say 'May'
     """
     for entry in bibs.entries.itervalues():
-        if (entry.fields.has_key(u'month')):
-            month = entry.fields[u'month']
-            if (not month.isdigit()):
-                try:# Try month full name and then abbreviation
+        if 'month' in entry.fields:
+            month = entry.fields['month']
+            if not month.isdigit():
+                try:  # Try month full name and then abbreviation
                     month = str(strptime(month,'%B').tm_mon)
                 except ValueError:
                     month = str(strptime(month,'%b').tm_mon)
-                entry.fields[u'month'] = month
+                entry.fields['month'] = month
 
 
 def fix_doi(bibs):
     """Some DOIs contain _s and mendeley escapes them with \ but this is
-       unnecessary.
+    unnecessary.
     """
     for entry in bibs.entries.itervalues():
-        if (entry.fields.has_key(u'doi')):
-            doi = entry.fields[u'doi']
-            if not doi.find('\_') == -1:
-                doi = doi.replace('\_','_')
-                entry.fields[u'doi'] = doi
+        if 'doi' in entry.fields:
+            entry.fields['doi'] = entry.fields['doi'].replace('\_', '_')  # If not present, does nothing.
 
 
 def write_output(args, bibs):
