@@ -5,6 +5,9 @@
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 from future_builtins import *  # ascii, filter, hex, map, oct, zip
+import sys
+
+sys.path.insert(3,"/home/drt24/git/upstreams/pybtex")
 
 import argparse
 import os
@@ -13,7 +16,6 @@ from pybtex.database.input import bibtex as bibtex_input
 from pybtex.database.output import bibtex as bibtex_output
 from time import strptime
 import re
-import sys
 
 
 def parse_aux(args):
@@ -88,6 +90,14 @@ def fix_doi(bibs):
         if 'doi' in entry.fields:
             entry.fields['doi'] = entry.fields['doi'].replace('\_', '_')  # If not present, does nothing.
 
+def fix_url(bibs):
+    """Some URLs contain _s and mendeley escapes them with \ but this is
+    unnecessary. Fortunately \ is an invalid character in a URL.
+    """
+    for entry in bibs.entries.itervalues():
+        if 'url' in entry.fields:
+            entry.fields['url'] = entry.fields['url'].replace('\_', '_')  # If not present, does nothing.
+
 
 def write_output(args, bibs):
     writer = bibtex_output.Writer()
@@ -106,6 +116,7 @@ def main(args):
     make_online(bibs)
     fix_months(bibs)
     fix_doi(bibs)
+    fix_url(bibs)
     write_output(args, bibs)
 
 
