@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Figure out how to use drip to speed up JVM startup."
+java -cp $REPOS/linuxconfig/bin/drake-0.1.4.jar drake.core $@

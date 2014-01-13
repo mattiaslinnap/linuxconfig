@@ -14,4 +14,4 @@ alias h='history'
 alias cd..='cd ..'
 alias cdr='cd $REPOS && pwd && ls'
 alias cdv='cd $VENVS && pwd && ls'
-
+alias cddata='cd $PSLIMITS_CACHE_DIR'
