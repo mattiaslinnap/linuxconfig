@@ -38,7 +38,7 @@ def check_git_clean(dir):
         assert os.path.exists('.git')
         assert os.path.isdir('.git')
         out = subprocess.check_output(['git', 'status'], stderr=subprocess.STDOUT)
-        if 'nothing to commit (working directory clean)' not in out:
+        if 'nothing to commit' not in out:
             printf('{} has uncommited work. Commit or remove it before sync.', dir)
             sys.exit(-3)
     except AssertionError:
