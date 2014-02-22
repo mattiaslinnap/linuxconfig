@@ -13,13 +13,13 @@ function resource()
 
 function newalias()
 {
-    nano -w -T 4 -E ~/bin/alias
+    nano -w -T 4 -E $REPOS/linuxconfig/alias
     resource
 }
 
 function newfunc()
 {
-    nano -w -T 4 -E ~/bin/bash_functions
+    nano -w -T 4 -E $REPOS/linuxconfig/bash_functions
     resource
 }
 
