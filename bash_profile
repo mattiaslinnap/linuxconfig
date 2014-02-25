@@ -9,7 +9,7 @@ export ANDROID_HOME="$REPOS/android-sdk"
 export ANDROID_NDK_HOME="$REPOS/android-ndk"
 
 export WORKON_HOME="$VENVS"
-export PATH="/usr/local/bin:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_NDK_HOME:$PATH"
+export PATH="/usr/local/bin:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_NDK_HOME:/Applications/Postgres93.app/Contents/MacOS/bin:$PATH"
 export PYTHONPATH="$PYTHONPATH:$REPOS/pyshortcuts"
 export PSLIMITS_CACHE_DIR="$DATASETS"
 
