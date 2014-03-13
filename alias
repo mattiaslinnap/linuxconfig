@@ -5,6 +5,8 @@ alias psg='ps -aef | grep'
 alias gst='git status'
 alias grem='git remote -v'
 
+alias sst='svn status'
+
 alias nano='nano -w'
 alias rnano='sudo nano -w -I'
 alias pnano='nano -w -T 4 -E'
