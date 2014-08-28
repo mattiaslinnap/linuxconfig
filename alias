@@ -1,0 +1,22 @@
+#!/bin/bash
+# Note: bash.functions have been already applied.
+
+alias psg='ps -aef | grep'
+alias gst='git status'
+alias grem='git remote -v'
+
+alias sst='svn status'
+
+alias nano='nano -w'
+alias rnano='sudo nano -w -I'
+alias pnano='nano -w -T 4 -E'
+
+alias x='chmod +x'
+alias h='history'
+alias cd..='cd ..'
+alias cdr='cd $REPOS && pwd && ls'
+alias cdv='cd $VENVS && pwd && ls'
+alias cddata='cd $DATASETS && pwd && ls'
+
+alias rsx='rsync --checksum --recursive --perms --compress --progress'
+alias rsxdel='rsx --delete'

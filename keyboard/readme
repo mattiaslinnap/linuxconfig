@@ -1,4 +1,0 @@
-gb goes to /usr/share/X11/xkb/symbols
-base.* and evdev.* go to /usr/share/X11/xkb/rules
-
-These files are based on Ubuntu 12.04 LTS. Use diff on any other platform or version to find the extra layout config to add.

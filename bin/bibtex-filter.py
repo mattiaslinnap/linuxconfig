@@ -72,6 +72,14 @@ def make_online(bibs):
              entry.type = u'online'
 
 
+def remove_url_from_non_online(bibs):
+    """Some bibliography styles add URLs for all entries, not just web pages. Remove URLs from entries not of type "online".
+    """
+    for entry in bibs.entries.itervalues():
+        if entry.type != 'online' and entry.fields.has_key('url'):
+            del entry.fields['url']
+
+
 def fix_months(bibs):
     """The 'month' field must be specified as a numeric value not as say 'May'
     """
@@ -118,6 +126,7 @@ def main(args):
     bibs = parse_bibtex(args, wanted)
     delete_notes(bibs)
     make_online(bibs)
+    remove_url_from_non_online(bibs)
     fix_months(bibs)
     fix_doi(bibs)
     fix_url(bibs)
