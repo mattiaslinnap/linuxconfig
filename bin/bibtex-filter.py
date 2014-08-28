@@ -15,6 +15,7 @@ from pybtex.database import BibliographyData
 from pybtex.database.input import bibtex as bibtex_input
 from pybtex.database.output import bibtex as bibtex_output
 from time import strptime
+from collections import OrderedDict
 import re
 
 
@@ -50,6 +51,9 @@ def parse_bibtex(args, wanted):
     for filename in input_bibtex_filenames(args):
         filebibs = parser.parse_file(filename)
         bibs.add_entries(filebibs.entries.iteritems())
+    # Sort the entries to ensure a consistent ordering of the output so that adding
+    # one new citation doesn't alter the whole file
+    bibs.entries = OrderedDict(sorted(bibs.entries.iteritems(),key=lambda x : x[0]))
     return bibs
 
 
