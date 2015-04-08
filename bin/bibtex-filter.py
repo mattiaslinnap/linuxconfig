@@ -101,6 +101,8 @@ def fix_url(bibs):
     for entry in bibs.entries.itervalues():
         if 'url' in entry.fields:
             entry.fields['url'] = entry.fields['url'].replace('\_', '_')  # If not present, does nothing.
+            if ' http' in entry.fields['url']:
+                entry.fields['url'] = entry.fields['url'].replace(' http', '| http')
 
 
 def write_output(args, bibs):
