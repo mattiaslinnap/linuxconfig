@@ -17,6 +17,34 @@ from collections import OrderedDict
 import re
 
 
+class Parser(bibtex_input.Parser):
+    """Override the default implementation to do some preprocessing"""
+    def parse_stream(self, stream):
+        self.unnamed_entry_counter = 1
+        text = stream.read()
+        text = text.replace(r'\o ','ø')
+        self.command_start = 0
+
+        entry_iterator = bibtex_input.BibTeXEntryIterator(
+            text,
+            keyless_entries=self.keyless_entries,
+            handle_error=self.handle_error,
+            want_entry=self.data.want_entry,
+            filename=self.filename,
+            macros=self.macros,
+        )
+        for entry in entry_iterator:
+            entry_type = entry[0]
+            if entry_type == 'string':
+                pass
+            elif entry_type == 'preamble':
+                self.process_preamble(*entry[1])
+            else:
+                self.process_entry(entry_type, *entry[1])
+        return self.data
+
+
+
 def parse_aux(args):
     wanted = set()
     with open(args.input_aux) as f:
@@ -45,7 +73,7 @@ def parse_bibtex(args, wanted):
         bibs = BibliographyData(wanted_entries=wanted)
     else:# Because Ubuntu/Debian doesn't have a new enough pybtex for wanted_entries
         bibs = BibliographyData()
-    parser = bibtex_input.Parser()
+    parser = Parser()
     for filename in input_bibtex_filenames(args):
         filebibs = parser.parse_file(filename)
         bibs.add_entries(iter(filebibs.entries.items()))
