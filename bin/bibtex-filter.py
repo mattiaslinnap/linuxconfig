@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Filter and sanitize a bibtex file for an article:
 * Remove all uncited entries,
 * Remove all annotations and comments.
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
-from future_builtins import *  # ascii, filter, hex, map, oct, zip
 import sys
 
 sys.path.insert(3,"/home/drt24/git/upstreams/pybtex")
@@ -50,15 +48,15 @@ def parse_bibtex(args, wanted):
     parser = bibtex_input.Parser()
     for filename in input_bibtex_filenames(args):
         filebibs = parser.parse_file(filename)
-        bibs.add_entries(filebibs.entries.iteritems())
+        bibs.add_entries(iter(filebibs.entries.items()))
     # Sort the entries to ensure a consistent ordering of the output so that adding
     # one new citation doesn't alter the whole file
-    bibs.entries = OrderedDict(sorted(bibs.entries.iteritems(),key=lambda x : x[0]))
+    bibs.entries = OrderedDict(sorted(iter(bibs.entries.items()),key=lambda x : x[0]))
     return bibs
 
 
 def delete_notes(bibs):
-    for entry in bibs.entries.itervalues():
+    for entry in bibs.entries.values():
         if 'annote' in entry.fields:
             del entry.fields['annote']
 
@@ -67,15 +65,15 @@ def make_online(bibs):
      """Mendeley does not support @online entries but biblatex does
         So if an entry is @misc and has a url then make it @online
      """
-     for entry in bibs.entries.itervalues():
-         if (entry.type == u'misc' and entry.fields.has_key(u'url')):
-             entry.type = u'online'
+     for entry in bibs.entries.values():
+         if (entry.type == 'misc' and 'url' in entry.fields):
+             entry.type = 'online'
 
 
 def fix_months(bibs):
     """The 'month' field must be specified as a numeric value not as say 'May'
     """
-    for entry in bibs.entries.itervalues():
+    for entry in bibs.entries.values():
         if 'month' in entry.fields:
             month = entry.fields['month']
             if not month.isdigit():
@@ -90,7 +88,7 @@ def fix_doi(bibs):
     """Some DOIs contain _s and mendeley escapes them with \ but this is
     unnecessary.
     """
-    for entry in bibs.entries.itervalues():
+    for entry in bibs.entries.values():
         if 'doi' in entry.fields:
             entry.fields['doi'] = entry.fields['doi'].replace('\_', '_')  # If not present, does nothing.
 
@@ -98,7 +96,7 @@ def fix_url(bibs):
     """Some URLs contain _s and mendeley escapes them with \ but this is
     unnecessary. Fortunately \ is an invalid character in a URL.
     """
-    for entry in bibs.entries.itervalues():
+    for entry in bibs.entries.values():
         if 'url' in entry.fields:
             entry.fields['url'] = entry.fields['url'].replace('\_', '_')  # If not present, does nothing.
             if ' http' in entry.fields['url']:
