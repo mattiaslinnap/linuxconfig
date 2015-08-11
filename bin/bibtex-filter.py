@@ -90,7 +90,7 @@ def fix_doi(bibs):
     """
     for entry in bibs.entries.values():
         if 'doi' in entry.fields:
-            entry.fields['doi'] = entry.fields['doi'].replace('\_', '_')  # If not present, does nothing.
+            entry.fields['doi'] = entry.fields['doi'].replace(r'\_', '_')  # If not present, does nothing.
 
 def fix_url(bibs):
     """Some URLs contain _s and mendeley escapes them with \ but this is
@@ -98,7 +98,7 @@ def fix_url(bibs):
     """
     for entry in bibs.entries.values():
         if 'url' in entry.fields:
-            entry.fields['url'] = entry.fields['url'].replace('\_', '_')  # If not present, does nothing.
+            entry.fields['url'] = entry.fields['url'].replace(r'\_', '_')  # If not present, does nothing.
             if ' http' in entry.fields['url']:
                 entry.fields['url'] = entry.fields['url'].replace(' http', '| http')
 
