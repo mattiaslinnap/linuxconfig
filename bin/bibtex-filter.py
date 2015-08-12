@@ -79,7 +79,7 @@ def parse_bibtex(args, wanted):
         bibs.add_entries(iter(filebibs.entries.items()))
     # Sort the entries to ensure a consistent ordering of the output so that adding
     # one new citation doesn't alter the whole file
-    bibs.entries = OrderedDict(sorted(iter(bibs.entries.items()),key=lambda x : x[0]))
+    bibs.entries = OrderedDict(sorted(bibs.entries.items(),key=lambda x : x[0]))
     return bibs
 
 
@@ -131,6 +131,12 @@ def fix_url(bibs):
                 entry.fields['url'] = entry.fields['url'].replace(' http', '| http')
 
 
+def sort_fields(bibs):
+    """Sort the fields and preserve the ordering so that they don't jiggle around"""
+    for entry in bibs.entries.values():
+        entry.fields = OrderedDict(sorted(entry.fields.items(), key=lambda x : x[0]))
+
+
 def write_output(args, bibs):
     writer = bibtex_output.Writer()
     writer.write_file(bibs, args.output_bibtex)
@@ -149,6 +155,7 @@ def main(args):
     fix_months(bibs)
     fix_doi(bibs)
     fix_url(bibs)
+    sort_fields(bibs)
     write_output(args, bibs)
 
 
