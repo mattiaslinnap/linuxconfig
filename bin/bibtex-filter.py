@@ -134,6 +134,7 @@ def fix_url(bibs):
 def sort_fields(bibs):
     """Sort the fields and preserve the ordering so that they don't jiggle around"""
     for entry in bibs.entries.values():
+        entry.persons = OrderedDict(sorted(entry.persons.items(), key=lambda x : x[0]))
         entry.fields = OrderedDict(sorted(entry.fields.items(), key=lambda x : x[0]))
 
 
