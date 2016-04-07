@@ -50,7 +50,7 @@ def parse_aux(args):
     with open(args.input_aux) as f:
         for line in f:
             line = line.strip()
-            m = re.match(r'^\\citation\{([a-zA-Z0-9-]+)\}$', line)
+            m = re.match(r'^\\citation\{([a-zA-Z0-9-.]+)\}$', line)
             if m:
                 wanted.add(m.group(1))
     return wanted
