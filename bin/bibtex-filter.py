@@ -4,9 +4,6 @@
 * Remove all annotations and comments.
 """
 import sys
-
-sys.path.insert(3,"/home/drt24/git/upstreams/pybtex")
-
 import argparse
 import os
 from pybtex.database import BibliographyData
