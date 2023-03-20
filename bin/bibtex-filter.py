@@ -40,7 +40,16 @@ class Parser(bibtex_input.Parser):
                 self.process_entry(entry_type, *entry[1])
         return self.data
 
-
+class Writer(bibtex_output.Writer):
+    """Overwrite the outputting to not encode where unnecessary
+       This seems to be always as the input is already escaped
+       so if we escape again we get double escaping
+    """
+    def _write_field(self, stream, type, value):
+#        if type == 'doi' or type == 'url':
+         stream.write(u',\n    %s = %s' % (type, self.quote(value)))
+#        else:
+#            stream.write(u',\n    %s = %s' % (type, self.quote(self._encode(value))))
 
 def parse_aux(args):
     wanted = set()
@@ -141,7 +150,7 @@ def sort_fields(bibs):
 
 
 def write_output(args, bibs):
-    writer = bibtex_output.Writer()
+    writer = Writer()
     writer.write_file(bibs, args.output_bibtex)
 
 
