@@ -94,6 +94,11 @@ def delete_notes(bibs):
         if 'annote' in entry.fields:
             del entry.fields['annote']
 
+def delete_files(bibs):
+    for entry in bibs.entries.values():
+        if 'file' in entry.fields:
+            del entry.fields['file']
+
 
 def make_online(bibs):
      """Mendeley does not support @online entries but biblatex does
@@ -163,6 +168,7 @@ def main(args):
         print('Keeping all citations as --input-aux not specified', file=sys.stderr)
     bibs = parse_bibtex(args, wanted)
     delete_notes(bibs)
+    delete_files(bibs)
     make_online(bibs)
     fix_months(bibs)
     fix_doi(bibs)
